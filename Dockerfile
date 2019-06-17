@@ -1,10 +1,15 @@
 FROM ruby:2.5-alpine
-
-RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.11.8/bin/linux/amd64/kubectl && \
-    chmod +x kubectl && mv ./kubectl /usr/local/bin/kubectl
-RUN curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh && \
-    chmod 700 get_helm.sh && bash get_helm.sh --version v2.12.3
     
+# These are needed to support building native extensions during
+# bundle install step
+RUN apk --update add --virtual build_deps build-base
+
+# Required at runtime by middleman server
+RUN apk add --no-cache nodejs
+
+# Required by the CircleCI build pipeline
+RUN apk add --no-cache git openssh-client bash
+
 RUN addgroup -g 1000 -S appgroup && \
     adduser -u 1000 -S appuser -G appgroup
 
