@@ -1,9 +1,22 @@
 FROM ruby:2.5-alpine
 
-RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.11.8/bin/linux/amd64/kubectl && \
-    chmod +x kubectl && mv ./kubectl /usr/local/bin/kubectl
-RUN curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh && \
-    chmod 700 get_helm.sh && bash get_helm.sh --version v2.12.3
+ENV \
+  HELM_VERSION=2.11.0 \
+  KUBECTL_VERSION=1.11.10
+
+RUN \
+  apk add \
+    --no-cache \
+    --no-progress \
+    git \
+    curl \
+    coreutils \
+    python3 \
+  && pip3 install --upgrade pip \
+  && pip3 install awscli \
+  && curl -sLo /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl \    
+  && curl -sL https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar -xzC /usr/local/bin --strip-components 1 linux-amd64/helm \
+  && chmod +x /usr/local/bin/kubectl
     
 RUN addgroup -g 1000 -S appgroup && \
     adduser -u 1000 -S appuser -G appgroup
