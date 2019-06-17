@@ -4,7 +4,6 @@ jobs:
     machine: true
     steps:
       - checkout
-          docker_layer_caching: true
       - run: docker build -t hello-world-ruby .
       - deploy:
           name: Push application Docker image
