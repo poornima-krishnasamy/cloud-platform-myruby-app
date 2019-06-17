@@ -5,3 +5,16 @@ jobs:
     steps:
       - checkout
       - run: docker build -t hello-world-ruby .
+      - deploy:
+          name: Push application Docker image
+          command: |
+            login="$(AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MYRUBY_APP} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MYRUBY_APP} aws ecr get-login --no-include-email)"
+            ${login}
+
+            docker tag hello-world-ruby "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
+            docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
+
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker tag app "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:latest"
+              docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:latest"
+            fi
