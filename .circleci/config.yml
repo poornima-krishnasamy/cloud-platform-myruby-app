@@ -25,7 +25,7 @@ jobs:
       - run:
           name: Authenticate with cluster
           command: |
-            curl -sLo /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl
+            curl -sLo /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.11.10/bin/linux/amd64/kubectl
             echo -n ${K8S_CLUSTER_CERT} | base64 -d > ./ca.crt
             kubectl config set-cluster ${K8S_CLUSTER_NAME} --certificate-authority=./ca.crt --server=https://api.${K8S_CLUSTER_NAME}
             kubectl config set-credentials circleci --token=${K8S_TOKEN}
