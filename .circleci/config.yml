@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /app
+    working_directory: /
     docker:
       - image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cp-team/cp-poornima-dev-module:myruby-app-2.0
         aws_auth:
@@ -10,8 +10,8 @@ jobs:
         # environment variables for all commands executed in the primary container
         environment:
           GITHUB_TEAM_NAME_SLUG: cloud-platform
-          APPLICATON_DEPLOY_NAME: simplephp-app
-          REPONAME: php-app
+          APPLICATON_DEPLOY_NAME: myruby-app
+          REPONAME: myruby-app
     steps:
       - checkout
       - setup_remote_docker:

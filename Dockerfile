@@ -3,7 +3,8 @@ FROM ruby:2.5-alpine
 RUN addgroup -g 1000 -S appgroup && \
     adduser -u 1000 -S appuser -G appgroup
 
-WORKDIR /app
+ENV PROJECT_ROOT /app
+WORKDIR $PROJECT_ROOT
 
 COPY Gemfile Gemfile.lock ./
 
