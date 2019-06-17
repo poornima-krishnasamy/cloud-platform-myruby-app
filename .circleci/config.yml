@@ -4,7 +4,6 @@ jobs:
     machine: true
     steps:
       - checkout
-      - setup_remote_docker:
           docker_layer_caching: true
       - run: docker build -t hello-world-ruby .
       - deploy:
@@ -32,8 +31,8 @@ jobs:
             chmod u+x ./kubectl
             # echo -n ${K8S_CLUSTER_CERT} | base64 -d > ./ca.crt
             # kubectl config set-cluster ${K8S_CLUSTER_NAME} --certificate-authority=./ca.crt --server=https://api.${K8S_CLUSTER_NAME}
-            # kubectl config set-credentials circleci --token=${K8S_TOKEN}
-            # kubectl config set-context ${K8S_CLUSTER_NAME} --cluster=${K8S_CLUSTER_NAME} --user=circleci --namespace=${K8S_NAMESPACE}
+            # kubectl config set-credentials circleci-dev --token=${K8S_TOKEN}
+            # kubectl config set-context ${K8S_CLUSTER_NAME} --cluster=${K8S_CLUSTER_NAME} --user=circleci-dev --namespace=${K8S_NAMESPACE}
             # kubectl config use-context ${K8S_CLUSTER_NAME}
             # kubectl --namespace=${K8S_NAMESPACE} get pods
       
