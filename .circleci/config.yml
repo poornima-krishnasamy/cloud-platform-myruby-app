@@ -8,6 +8,9 @@ references:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY_MYRUBYAPP
         environment:
           GITHUB_TEAM_NAME_SLUG: family-justice
+          GITHUB_TEAM_MYAPP_NAME_SLUG: cp-team
+          APPLICATION_MYAPP_DEPLOY_NAME: myruby-app
+          MYAPP_REPONAME: cp-poornima-dev-module
 jobs:
   build_staging:
     machine: true
@@ -17,19 +20,19 @@ jobs:
       - deploy:
           name: Push application Docker image
           environment:
-            GITHUB_TEAM_NAME_SLUG: cp-team
-            APPLICATON_DEPLOY_NAME: myruby-app
-            REPONAME: cp-poornima-dev-module
+            GITHUB_TEAM_MYAPP_NAME_SLUG: cp-team
+            APPLICATON_MYAPP_DEPLOY_NAME: myruby-app
+            MYAPP_REPONAME: cp-poornima-dev-module
           command: |
             login="$(AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MYRUBYAPP} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MYRUBYAPP} aws ecr get-login --no-include-email)"
             ${login}
 
-            docker tag hello-world-ruby "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
-            docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
+            docker tag hello-world-ruby "${ECR_ENDPOINT}/${GITHUB_TEAM_MYAPP_NAME_SLUG}/${MYAPP_REPONAME}:${CIRCLE_SHA1}"
+            docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_MYAPP_NAME_SLUG}/${MYAPP_REPONAME}:${CIRCLE_SHA1}"
 
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              docker tag hello-world-ruby "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:myruby-app-latest"
-              docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:myruby-app-latest"
+              docker tag hello-world-ruby "${ECR_ENDPOINT}/${GITHUB_TEAM_MYAPP_NAME_SLUG}/${MYAPP_REPONAME}:myruby-app-latest"
+              docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_MYAPP_NAME_SLUG}/${MYAPP_REPONAME}:myruby-app-latest"
             fi
   deploy_staging:
     <<: *cloud_container
@@ -43,7 +46,7 @@ jobs:
       - deploy:
           name: deploy to staging
           command: |
-            kubectl run myruby-app --image=${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1} --port 4567
+            kubectl run myruby-app --image=${ECR_ENDPOINT}/${GITHUB_TEAM_MYAPP_NAME_SLUG}/${MYAPP_REPONAME}:${CIRCLE_SHA1} --port 4567
 workflows:
   version: 2
   test-build-deploy:
