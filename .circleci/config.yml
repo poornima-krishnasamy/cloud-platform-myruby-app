@@ -41,12 +41,9 @@ jobs:
             setup-kube-auth
             kubectl config use-context staging
       - deploy:
-          name: rolling update image to staging
+          name: deploy to staging
           command: |
-            kubectl set image -n ${K8S_NAMESPACE} \
-                webapp="${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
-            kubectl annotate -n ${K8S_NAMESPACE} \
-                set image ${REPONAME}:${CIRCLE_SHA1} via CircleCI"
+            kubectl run myruby-app --image=${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1} --port 4567
 workflows:
   version: 2
   test-build-deploy:
