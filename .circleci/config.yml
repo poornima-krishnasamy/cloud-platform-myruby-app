@@ -6,7 +6,7 @@ references:
         environment:
           GITHUB_TEAM_NAME_SLUG: family-justice
 jobs:
-  build:
+  build_staging:
     machine: true
     steps:
       - checkout
@@ -28,7 +28,7 @@ jobs:
               docker tag hello-world-ruby "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:myruby-app-latest"
               docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:myruby-app-latest"
             fi
-  build:
+  deploy_staging:
     <<: *cloud_container
     steps:
       - checkout
@@ -42,6 +42,17 @@ jobs:
             kubectl config set-context ${K8S_CLUSTER_NAME} --cluster=${K8S_CLUSTER_NAME} --user=circleci --namespace=${K8S_NAMESPACE}
             kubectl config use-context ${K8S_CLUSTER_NAME}
             kubectl set image -n ${K8S_NAMESPACE} \
-                webapp="${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:myruby-app-latest"
+                webapp="${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
             kubectl annotate -n ${K8S_NAMESPACE} \
                 set image ${REPONAME}:${CIRCLE_SHA1} via CircleCI"
+workflows:
+  version: 2
+  test-build-deploy:
+    jobs:
+      - build_staging:
+          filters:
+            branches:
+              only: master
+      - deploy_staging:
+          requires:
+            - build_staging
