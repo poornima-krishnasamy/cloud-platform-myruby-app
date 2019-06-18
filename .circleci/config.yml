@@ -18,7 +18,7 @@ jobs:
             APPLICATON_DEPLOY_NAME: myruby-app
             REPONAME: cp-poornima-dev-module
           command: |
-            login="$(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)"
+            login="$(AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MYRUBYAPP} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MYRUBYAPP} aws ecr get-login --no-include-email)"
             ${login}
 
             docker tag hello-world-ruby "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
