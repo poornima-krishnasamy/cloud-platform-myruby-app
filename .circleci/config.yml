@@ -52,10 +52,5 @@ workflows:
   version: 2
   test-build-deploy:
     jobs:
-      - build_staging:
-          filters:
-            branches:
-              only: master
-      - deploy_staging:
-          requires:
-            - build_staging
+      - build_staging
+      - deploy_staging
