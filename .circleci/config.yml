@@ -1,4 +1,10 @@
 version: 2
+references:
+cloud_container: &cloud_container
+    docker:
+      - image: ${ECR_ENDPOINT}/cloud-platform/tools:circleci
+        environment:
+          GITHUB_TEAM_NAME_SLUG: family-justice
 jobs:
   build:
     machine: true
@@ -15,24 +21,23 @@ jobs:
             login="$(AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MYRUBYAPP} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MYRUBYAPP} aws ecr get-login --no-include-email)"
             ${login}
 
-            docker tag hello-world-ruby "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:myruby-app-1.0"
-            docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:myruby-app-1.0"
+            docker tag hello-world-ruby "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
+            docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:${CIRCLE_SHA1}"
 
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               docker tag hello-world-ruby "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:myruby-app-latest"
               docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:myruby-app-latest"
             fi
+  deploy_staging:
+    <<: *cloud_container
+    steps:
+      - checkout
+
       - run:
-          name: Authenticate with cluster
+          name: kubectl use context
           command: |
-            sudo apt-get update && sudo apt-get -y install gettext-base
-            curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.11.10/bin/linux/amd64/kubectl
-            chmod u+x ./kubectl
-            sudo mv kubectl /usr/local/bin/
-            echo -n ${K8S_CLUSTER_CERT} | base64 -d > ./ca.crt
+            setup-kube-auth
             kubectl config set-cluster ${K8S_CLUSTER_NAME} --certificate-authority=./ca.crt --server=https://api.${K8S_CLUSTER_NAME}
-            kubectl config set-credentials circleci-dev --token=${K8S_TOKEN}
-            kubectl config set-context ${K8S_CLUSTER_NAME} --cluster=${K8S_CLUSTER_NAME} --user=circleci-dev --namespace=${K8S_NAMESPACE}
+            kubectl config set-credentials circleci --token=${K8S_TOKEN}
+            kubectl config set-context ${K8S_CLUSTER_NAME} --cluster=${K8S_CLUSTER_NAME} --user=circleci --namespace=${K8S_NAMESPACE}
             kubectl config use-context ${K8S_CLUSTER_NAME}
-            kubectl get pods --namespace=${K8S_NAMESPACE}
-      
