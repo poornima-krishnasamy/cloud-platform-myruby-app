@@ -35,7 +35,7 @@ jobs:
       - run:
           name: kubectl use context
           command: |
-          login="$(AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MYRUBYAPP} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MYRUBYAPP} aws ecr get-login --no-include-email)"
+            login="$(AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MYRUBYAPP} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MYRUBYAPP} aws ecr get-login --no-include-email)"
             ${login}
             setup-kube-auth
             kubectl config set-cluster ${K8S_CLUSTER_NAME} --certificate-authority=./ca.crt --server=https://api.${K8S_CLUSTER_NAME}
