@@ -1,6 +1,6 @@
 version: 2
 references:
-cloud_container: &cloud_container
+  cloud_container: &cloud_container
     docker:
       - image: ${ECR_ENDPOINT}/cloud-platform/tools:circleci
         environment:
