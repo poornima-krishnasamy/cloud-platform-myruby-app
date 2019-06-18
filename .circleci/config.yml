@@ -2,7 +2,7 @@ version: 2
 references:
   cloud_container: &cloud_container
     docker:
-      - image: ${ECR_ENDPOINT}/cloud-platform/tools:circleci
+      - image: ${ECR_ENDPOINT}/cloud-platform/tools:18bca9f3750cd2b32e649f45ea07bde63231b617-circleci
         environment:
           GITHUB_TEAM_NAME_SLUG: family-justice
 jobs:
