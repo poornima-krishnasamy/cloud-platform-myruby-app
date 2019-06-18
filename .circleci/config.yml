@@ -48,8 +48,8 @@ jobs:
           command: |
             export BUILD_DATE=$(date -Is) >> $BASH_ENV
             source $BASH_ENV
-            kubectl set image -n ${K8S_NAMESPACE} \
-                    deployment/${APPLICATON_MYAPP_DEPLOY_NAME} \
+            kubectl set image -n poornima-dev \
+                    deployment/myruby-app \
                     myruby-app="${ECR_ENDPOINT}/${GITHUB_TEAM_MYAPP_NAME_SLUG}/${MYAPP_REPONAME}:${CIRCLE_SHA1}"
 
 workflows:
