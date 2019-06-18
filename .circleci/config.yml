@@ -46,7 +46,12 @@ jobs:
       - deploy:
           name: deploy to staging
           command: |
-            kubectl run myruby-app --image=${ECR_ENDPOINT}/${GITHUB_TEAM_MYAPP_NAME_SLUG}/${MYAPP_REPONAME}:${CIRCLE_SHA1} --port 4567
+            export BUILD_DATE=$(date -Is) >> $BASH_ENV
+            source $BASH_ENV
+            kubectl set image -n ${K8S_NAMESPACE} \
+                    deployment/${APPLICATON_MYAPP_DEPLOY_NAME} \
+                    myruby-app="${ECR_ENDPOINT}/${GITHUB_TEAM_MYAPP_NAME_SLUG}/${MYAPP_REPONAME}:${CIRCLE_SHA1}"
+
 workflows:
   version: 2
   test-build-deploy:
