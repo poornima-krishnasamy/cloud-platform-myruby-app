@@ -28,7 +28,7 @@ jobs:
               docker tag hello-world-ruby "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:myruby-app-latest"
               docker push "${ECR_ENDPOINT}/${GITHUB_TEAM_NAME_SLUG}/${REPONAME}:myruby-app-latest"
             fi
-  deploy_staging:
+  build:
     <<: *cloud_container
     steps:
       - checkout
