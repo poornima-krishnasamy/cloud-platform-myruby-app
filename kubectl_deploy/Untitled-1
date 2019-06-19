@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: basic-auth
-data:
-  auth: cG9vcm5pbWE6JGFwcjEkc1NmL2lucm4kT283b1RRNkVOZjlSV0hXWVRxUWNFMQo=
