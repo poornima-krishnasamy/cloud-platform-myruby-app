@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "helmchart.fullname" . }}
+  name: helloworld-rubyapp-service
   labels:
-{{ include "helmchart.labels" . | indent 4 }}
+    app: helloworld-rubyapp-service
+    chart: {{ .Chart.Name }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
-  type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
+      targetPort: 4567
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "helmchart.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    app: helloworld-rubyapp
