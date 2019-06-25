@@ -2,6 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: helloworld-rubyapp-ingress
+  namespace: poornima-dev
   annotations:
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: basic-auth
@@ -9,6 +10,9 @@ spec:
   tls:
   - hosts:
     - poornima-rubyapp.apps.live-1.cloud-platform.service.justice.gov.uk
+  - hosts:
+    - dev-pk.service.justice.gov.uk
+    secretName: myruby-app-cert-secret
   rules:
   - host: poornima-rubyapp.apps.live-1.cloud-platform.service.justice.gov.uk
     http:
