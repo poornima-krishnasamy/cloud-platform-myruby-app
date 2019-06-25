@@ -1,18 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: helloworld-rubyapp-ingress
+  name: {{ template "helmchart.fullname" . }}
   annotations:
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: basic-auth
 spec:
   tls:
-    - host: {{ .Values.ingress.host }}
+    - host: pk-uu.apps.live-1.cloud-platform.service.justice.gov.uk
   rules:
-    - host: {{ .Values.ingress.host }}
+    - host: pk-uu.apps.live-1.cloud-platform.service.justice.gov.uk
       http:
         paths:
         - path: /
           backend:
-            serviceName: helloworld-rubyapp-service
+            serviceName: {{ template "helmchart.fullname" . }}
             servicePort: 4567

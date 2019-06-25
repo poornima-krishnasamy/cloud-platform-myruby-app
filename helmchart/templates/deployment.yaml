@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: helloworld-rubyapp
+  name: {{ template "helmchart.fullname" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: helloworld-rubyapp
+      app: {{ template "helmchart.fullname" . }}
   template:
     metadata:
       labels:
-        app: helloworld-rubyapp
+        app: {{ template "helmchart.fullname" . }}
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - app: {{ template "helmchart.fullname" . }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:

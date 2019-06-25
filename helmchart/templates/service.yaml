@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: helloworld-rubyapp-service
+  name: {{ template "helmchart.fullname" . }}
   labels:
-    app: helloworld-rubyapp-service
-    chart: {{ .Chart.Name }}
+    app:  {{ template "helmchart.fullname" . }}
+    chart: {{ template "helmchart.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
@@ -13,4 +13,5 @@ spec:
       targetPort: 4567
       name: http
   selector:
-    app: helloworld-rubyapp
+    app: {{ template "helmchart.fullname" . }}
+    release: {{ .Release.Name }}
