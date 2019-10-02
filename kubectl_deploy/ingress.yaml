@@ -9,12 +9,12 @@ metadata:
 spec:
   tls:
   - hosts:
-    - poornima-rubyapp.apps.live-1.cloud-platform.service.justice.gov.uk
+    - poornima-rubyapp.apps.pk-test-9.cloud-platform.service.justice.gov.uk
   - hosts:
     - dev-pk.service.justice.gov.uk
     secretName: myruby-app-cert-secret
   rules:
-  - host: poornima-rubyapp.apps.live-1.cloud-platform.service.justice.gov.uk
+  - host: poornima-rubyapp.apps.pk-test-9.cloud-platform.service.justice.gov.uk
     http:
       paths:
       - path: /
