@@ -11,6 +11,6 @@ spec:
     spec:
       containers:
       - name: rubyapp
-        image: 754256621582.dkr.ecr.eu-west-2.amazonaws.com/cp-team/cp-poornima-dev-module:myruby-app-latest
+        image: poornimak/cloud-platform-myruby-app:1.1
         ports:
           - containerPort: 4567
