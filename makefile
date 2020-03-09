@@ -1,5 +1,5 @@
-IMAGE := ministryofjustice/access-elasticsearch
-VERSION := 1.4
+IMAGE := poornimak/myrubyapp
+VERSION := 1.1
 KUBE_CONFIG := ~/.kube/config
 AWS_PROFILE := moj-cp # Cloud Platform AWS account
 
