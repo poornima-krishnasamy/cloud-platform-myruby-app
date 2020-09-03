@@ -1,9 +1,16 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: helloworld-rubyapp
 spec:
-  replicas: 1
+  replicas: 4
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 2
+      maxSurge: 50%
+  selector:
+    matchLabels:
+      app: helloworld-rubyapp
   template:
     metadata:
       labels:
@@ -11,6 +18,6 @@ spec:
     spec:
       containers:
       - name: rubyapp
-        image: poornimak/cloud-platform-myruby-app:1.1
+        image: ministryofjustice/cloud-platform-helloworld-ruby:1.1
         ports:
-          - containerPort: 4567
+        - containerPort: 4567
